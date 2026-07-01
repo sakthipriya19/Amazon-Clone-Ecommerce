@@ -1,0 +1,47 @@
+<article class="product-card" (click)="goToDetail()">
+  <div class="image-wrap">
+    <img [src]="product.thumbnail" [alt]="product.title" loading="lazy" />
+    @if (hasDiscount()) {
+      <span class="badge badge-danger discount-badge">-{{ product.discountPercentage | number: '1.0-0' }}%</span>
+    }
+    <button
+      type="button"
+      class="wishlist-btn"
+      [class.active]="isWishlisted()"
+      (click)="toggleWishlist($event)"
+      [attr.aria-label]="isWishlisted() ? 'Remove from wishlist' : 'Add to wishlist'"
+    >
+      {{ isWishlisted() ? '♥' : '♡' }}
+    </button>
+  </div>
+
+  <div class="card-body">
+    @if (product.brand) {
+      <span class="brand">{{ product.brand }}</span>
+    }
+    <h3 class="title">{{ product.title }}</h3>
+    <app-star-rating [rating]="product.rating" size="sm" />
+
+    <div class="price-row">
+      <span class="price">{{ discountedPrice() | currency }}</span>
+      @if (hasDiscount()) {
+        <span class="original-price">{{ product.price | currency }}</span>
+      }
+    </div>
+
+    @if (product.stock <= 5 && product.stock > 0) {
+      <span class="badge badge-accent stock-warning">Only {{ product.stock }} left</span>
+    } @else if (product.stock === 0) {
+      <span class="badge badge-danger stock-warning">Out of stock</span>
+    }
+
+    <button
+      type="button"
+      class="btn btn-primary add-btn"
+      [disabled]="product.stock === 0"
+      (click)="addToCart($event)"
+    >
+      Add to Cart
+    </button>
+  </div>
+</article>

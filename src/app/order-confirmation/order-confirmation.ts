@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { Ecommerceservice } from '../service/ecommerceservice';
-import { Order } from '../interface/ecoomerceinterface';
+import { Order } from '../interface/product.interface';
+import { OrderService } from '../service/order';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -14,12 +14,12 @@ export class OrderConfirmation implements OnInit {
   order: Order | undefined;
   orderNotFound: boolean = false;
 
-  constructor(private route: ActivatedRoute, private ecommerceService: Ecommerceservice) {}
+  constructor(private route: ActivatedRoute, private orderService: OrderService) {}
 
   ngOnInit() {
     this.route.params.subscribe((params) => {
       const orderId = params['orderId'];
-      this.order = this.ecommerceService.getOrderById(orderId);
+      this.order = this.orderService.getOrderById(orderId);
 
       if (!this.order) {
         this.orderNotFound = true;

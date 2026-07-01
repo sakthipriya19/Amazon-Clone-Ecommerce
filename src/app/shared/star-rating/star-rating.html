@@ -1,0 +1,11 @@
+<span class="star-rating" [class.md]="size === 'md'">
+  <span class="stars">
+    @for (star of stars(); track $index) {
+      <span class="star" [class.full]="star === 'full'" [class.half]="star === 'half'">★</span>
+    }
+  </span>
+  <span class="rating-value">{{ displayRating() }}</span>
+  @if (count !== undefined) {
+    <span class="rating-count">({{ count }})</span>
+  }
+</span>

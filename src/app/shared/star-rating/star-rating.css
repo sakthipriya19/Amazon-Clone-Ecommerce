@@ -1,0 +1,39 @@
+.star-rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.stars {
+  display: inline-flex;
+  letter-spacing: 1px;
+}
+
+.star {
+  color: #dfe3e8;
+  font-size: 0.95rem;
+}
+
+.md .star {
+  font-size: 1.2rem;
+}
+
+.star.full {
+  color: var(--color-accent);
+}
+
+.star.half {
+  color: var(--color-accent);
+  opacity: 0.5;
+}
+
+.rating-value {
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.rating-count {
+  color: var(--color-text-muted);
+}

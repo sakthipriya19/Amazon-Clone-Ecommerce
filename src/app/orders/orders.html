@@ -1,0 +1,29 @@
+<div class="container mt-2 mb-3">
+  <h2>My Orders</h2>
+
+  @if (orders().length === 0) {
+    <div class="empty-state card text-center mt-2">
+      <h3>No orders yet</h3>
+      <p class="mt-1">Your placed orders will show up here.</p>
+      <a routerLink="/products" class="btn btn-primary mt-2">Start shopping</a>
+    </div>
+  } @else {
+    <div class="orders-list mt-2">
+      @for (order of orders(); track order.id) {
+        <a class="order-card card" [routerLink]="['/order-confirmation', order.id]">
+          <div class="order-thumbs">
+            @for (item of order.items.slice(0, 4); track item.product.id) {
+              <img [src]="item.product.thumbnail" [alt]="item.product.title" />
+            }
+          </div>
+          <div class="order-info">
+            <span class="order-id">{{ order.id }}</span>
+            <span class="order-date">{{ order.orderDate | date: 'mediumDate' }}</span>
+          </div>
+          <span class="badge badge-primary status">{{ order.status }}</span>
+          <span class="order-total">{{ order.total | currency }}</span>
+        </a>
+      }
+    </div>
+  }
+</div>

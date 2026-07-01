@@ -1,25 +1,29 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
+import { of } from 'rxjs';
+import { vi } from 'vitest';
 
 import { Home } from './home';
-import { Ecommerceservice } from '../service/ecommerceservice';
-import { ecommerce } from '../interface/ecoomerceinterface';
+import { ProductService } from '../service/product';
 
 describe('Home', () => {
   let component: Home;
   let fixture: ComponentFixture<Home>;
-  let ecommerceServiceSpy: jasmine.SpyObj<Ecommerceservice>;
+  let productServiceSpy: { getCategories: ReturnType<typeof vi.fn>; getAll: ReturnType<typeof vi.fn> };
 
   beforeEach(async () => {
+    productServiceSpy = {
+      getCategories: vi.fn().mockReturnValue(of([])),
+      getAll: vi.fn().mockReturnValue(of({ products: [], total: 0, skip: 0, limit: 0 })),
+    };
+
     await TestBed.configureTestingModule({
       imports: [Home],
-      providers: [
-        { provide: Ecommerceservice, useValue: jasmine.createSpyObj('Ecommerceservice', ['getClothingDetails']) }
-      ]
+      providers: [provideRouter([]), { provide: ProductService, useValue: productServiceSpy }],
     }).compileComponents();
 
     fixture = TestBed.createComponent(Home);
     component = fixture.componentInstance;
-    ecommerceServiceSpy = TestBed.inject(Ecommerceservice);
     await fixture.whenStable();
   });
 
@@ -27,35 +31,9 @@ describe('Home', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should call ngOnInit', () => {
-    spyOn(component, 'ngOnInit');
+  it('should load categories and products on init', () => {
     component.ngOnInit();
-    expect(component.ngOnInit).toHaveBeenCalledTimes(1);
-  });
-
-  it('should call loadProductDetails', () => {
-    spyOn(component, 'loadProductDetails');
-    component.ngOnInit();
-    expect(component.loadProductDetails).toHaveBeenCalledTimes(1);
-  });
-
-  it('should call ecommerceService.getClothingDetails', () => {
-    component.loadProductDetails();
-    expect(ecommerceServiceSpy.getClothingDetails).toHaveBeenCalledTimes(1);
-  });
-
-  it('should update loadItems', () => {
-    const data = [{ id: 1, name: 'Test' }];
-    ecommerceServiceSpy.getClothingDetails.and.returnValue(of(data));
-    component.loadProductDetails();
-    fixture.detectChanges();
-    expect(component.loadItems).toEqual(data);
-  });
-
-  it('should not update loadItems if ecommerceService.getClothingDetails returns error', () => {
-    ecommerceServiceSpy.getClothingDetails.and.returnValue(throwError('Error'));
-    component.loadProductDetails();
-    fixture.detectChanges();
-    expect(component.loadItems).toEqual([]);
+    expect(productServiceSpy.getCategories).toHaveBeenCalled();
+    expect(productServiceSpy.getAll).toHaveBeenCalled();
   });
 });

@@ -3,7 +3,7 @@
     <div class="order-not-found">
       <h2>Order Not Found</h2>
       <p>Sorry, we couldn't find your order. Please check your order ID and try again.</p>
-      <a routerLink="/home" class="btn-home">Back to Home</a>
+      <a routerLink="/" class="btn-home">Back to Home</a>
     </div>
   } @else if (order) {
     <div class="confirmation-content">
@@ -61,25 +61,21 @@
           <thead>
             <tr>
               <th>Product</th>
-              <th>Size</th>
-              <th>Color</th>
               <th>Quantity</th>
               <th>Unit Price</th>
               <th>Total</th>
             </tr>
           </thead>
           <tbody>
-            @for (item of order.items; track item.id) {
+            @for (item of order.items; track item.product.id) {
               <tr>
                 <td class="product-name">
-                  <img [src]="item.image" [alt]="item.name" class="product-thumb" />
-                  <span>{{ item.name }}</span>
+                  <img [src]="item.product.thumbnail" [alt]="item.product.title" class="product-thumb" />
+                  <span>{{ item.product.title }}</span>
                 </td>
-                <td>{{ item.selectedSize }}</td>
-                <td>{{ item.selectedColor }}</td>
                 <td>{{ item.quantity }}</td>
-                <td>${{ item.price.toFixed(2) }}</td>
-                <td class="total-cell">${{ (item.price * item.quantity).toFixed(2) }}</td>
+                <td>{{ item.product.price | currency }}</td>
+                <td class="total-cell">{{ (item.product.price * item.quantity) | currency }}</td>
               </tr>
             }
           </tbody>
@@ -91,20 +87,20 @@
         <div class="summary-box">
           <div class="summary-row">
             <span>Subtotal:</span>
-            <span>${{ order.subtotal.toFixed(2) }}</span>
+            <span>{{ order.subtotal | currency }}</span>
           </div>
           <div class="summary-row">
             <span>Tax (8%):</span>
-            <span>${{ order.tax.toFixed(2) }}</span>
+            <span>{{ order.tax | currency }}</span>
           </div>
           <div class="summary-row">
             <span>Shipping:</span>
-            <span>${{ order.shippingCost.toFixed(2) }}</span>
+            <span>{{ order.shippingCost | currency }}</span>
           </div>
           <div class="summary-divider"></div>
           <div class="summary-row total">
             <span>Total Amount:</span>
-            <span>${{ order.total.toFixed(2) }}</span>
+            <span>{{ order.total | currency }}</span>
           </div>
         </div>
       </div>

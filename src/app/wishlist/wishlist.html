@@ -1,0 +1,22 @@
+<div class="container mt-2 mb-3">
+  <div class="header-row">
+    <h2>My Wishlist ({{ items().length }})</h2>
+    @if (items().length > 0) {
+      <button type="button" class="btn btn-primary" (click)="moveAllToCart()">Move all to cart</button>
+    }
+  </div>
+
+  @if (items().length === 0) {
+    <div class="empty-state card text-center mt-2">
+      <h3>Your wishlist is empty</h3>
+      <p class="mt-1">Save items you love by tapping the heart icon.</p>
+      <a routerLink="/products" class="btn btn-primary mt-2">Browse products</a>
+    </div>
+  } @else {
+    <div class="product-grid mt-2">
+      @for (product of items(); track product.id) {
+        <app-product-card [product]="product" />
+      }
+    </div>
+  }
+</div>

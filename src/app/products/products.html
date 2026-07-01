@@ -1,66 +1,66 @@
-<div class="products-container">
-  <div class="filter-section">
-    <h3>Filter Products</h3>
-    <label for="category">Category:</label>
-    <select id="category" [(ngModel)]="selectedCategory" (change)="applyFilter()">
-      <option value="">All Categories</option>
-      <option value="Men">Men</option>
-      <option value="Women">Women</option>
-      <option value="Kids">Kids</option>
-    </select>
+<div class="container mt-2 mb-3">
+  <div class="toolbar card p-2">
+    <div class="toolbar-field">
+      <label for="category">Category</label>
+      <select id="category" [(ngModel)]="selectedCategory" (change)="applyCategory()">
+        <option value="">All Categories</option>
+        @for (category of categories(); track category.slug) {
+          <option [value]="category.slug">{{ category.name }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="toolbar-field">
+      <label for="sort">Sort by</label>
+      <select id="sort" [(ngModel)]="sort" (change)="applySort()">
+        <option value="relevance">Relevance</option>
+        <option value="price-asc">Price: Low to High</option>
+        <option value="price-desc">Price: High to Low</option>
+        <option value="rating">Customer Rating</option>
+      </select>
+    </div>
+
+    @if (searchQuery || selectedCategory) {
+      <button type="button" class="btn btn-outline clear-btn" (click)="clearFilters()">Clear filters</button>
+    }
+
+    <span class="result-count">{{ total() }} results{{ searchQuery ? ' for "' + searchQuery + '"' : '' }}</span>
   </div>
 
-  <div class="product-grid">
-    @for (product of filteredItems; track product.id) {
-      <div class="product-card">
-        <div class="product-image">
-          <img [src]="product.image" [alt]="product.name" />
-        </div>
-        <div class="product-info">
-          <h3>{{ product.name }}</h3>
-          <p class="description">{{ product.description }}</p>
-          <p class="price">${{ product.price }}</p>
-          
-          <div class="product-options">
-            <!-- Size Selection -->
-            <div class="option-group">
-              <label >Size:</label>
-              <select [(ngModel)]="product.selectedSize">
-                <option value="">Select Size</option>
-                @for (size of product.size; track size) {
-                  <option [value]="size">{{ size }}</option>
-                }
-              </select>
-            </div>
+  @if (loading()) {
+    <div class="product-grid mt-2">
+      @for (i of [1,2,3,4,5,6,7,8]; track i) {
+        <div class="skeleton" style="height: 320px;"></div>
+      }
+    </div>
+  } @else if (products().length === 0) {
+    <div class="empty-state mt-3 text-center">
+      <h3>No products found</h3>
+      <p class="mt-1">Try a different search term or clear your filters.</p>
+    </div>
+  } @else {
+    <div class="product-grid mt-2">
+      @for (product of products(); track product.id) {
+        <app-product-card [product]="product" />
+      }
+    </div>
 
-            <!-- Color Selection -->
-            <div class="option-group">
-              <label>Color:</label>
-              <select  [(ngModel)]="product.selectedColor">
-                <option value="">Select Color</option>
-                @for (color of product.color; track color) {
-                  <option [value]="color">{{ color }}</option>
-                }
-              </select>
-            </div>
-
-            <!-- Quantity Selection -->
-            <div class="option-group">
-              <label>Quantity:</label>
-              <input 
-                type="number" 
-                [(ngModel)]="product.selectedQuantity" 
-                min="1" 
-                max="10"
-              />
-            </div>
-          </div>
-
-          <button (click)="addToCart(product)" class="btn-add-cart">
-            Add To Cart
+    @if (totalPages > 1) {
+      <div class="pagination mt-3">
+        <button type="button" class="btn btn-outline" [disabled]="page <= 1" (click)="goToPage(page - 1)">Prev</button>
+        @for (p of pageNumbers; track p) {
+          <button
+            type="button"
+            class="btn page-btn"
+            [class.btn-primary]="page === p"
+            [class.btn-outline]="page !== p"
+            (click)="goToPage(p)"
+          >
+            {{ p }}
           </button>
-        </div>
+        }
+        <button type="button" class="btn btn-outline" [disabled]="page >= totalPages" (click)="goToPage(page + 1)">Next</button>
       </div>
     }
-  </div>
+  }
 </div>

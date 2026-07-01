@@ -1,0 +1,20 @@
+<div class="auth-page">
+  <form class="auth-card card" (ngSubmit)="submit()" #loginForm="ngForm">
+    <h2>Sign in</h2>
+    <p class="subtitle">Welcome back to YG STORE</p>
+
+    @if (error()) {
+      <div class="error-banner">{{ error() }}</div>
+    }
+
+    <label for="email">Email</label>
+    <input id="email" type="email" name="email" [(ngModel)]="email" required autocomplete="email" />
+
+    <label for="password">Password</label>
+    <input id="password" type="password" name="password" [(ngModel)]="password" required autocomplete="current-password" />
+
+    <button type="submit" class="btn btn-primary submit-btn" [disabled]="loginForm.invalid">Sign in</button>
+
+    <p class="switch-link">New to YG STORE? <a routerLink="/signup">Create an account</a></p>
+  </form>
+</div>

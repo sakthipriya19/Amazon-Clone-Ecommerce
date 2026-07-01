@@ -1,0 +1,26 @@
+<div class="auth-page">
+  <form class="auth-card card" (ngSubmit)="submit()" #signupForm="ngForm">
+    <h2>Create account</h2>
+    <p class="subtitle">Join YG STORE in seconds</p>
+
+    @if (error()) {
+      <div class="error-banner">{{ error() }}</div>
+    }
+
+    <label for="name">Full name</label>
+    <input id="name" type="text" name="name" [(ngModel)]="name" required autocomplete="name" />
+
+    <label for="email">Email</label>
+    <input id="email" type="email" name="email" [(ngModel)]="email" required autocomplete="email" />
+
+    <label for="password">Password</label>
+    <input id="password" type="password" name="password" [(ngModel)]="password" required autocomplete="new-password" />
+
+    <label for="confirmPassword">Confirm password</label>
+    <input id="confirmPassword" type="password" name="confirmPassword" [(ngModel)]="confirmPassword" required autocomplete="new-password" />
+
+    <button type="submit" class="btn btn-primary submit-btn" [disabled]="signupForm.invalid">Create account</button>
+
+    <p class="switch-link">Already have an account? <a routerLink="/login">Sign in</a></p>
+  </form>
+</div>

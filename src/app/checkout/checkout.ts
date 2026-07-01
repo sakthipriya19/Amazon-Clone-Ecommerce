@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
-import { Ecommerceservice } from '../service/ecommerceservice';
-import { CartItem } from '../interface/ecoomerceinterface';
+import { Component, OnInit } from '@angular/core';
+import { CartItem } from '../interface/product.interface';
+import { CartService } from '../service/cart';
+import { OrderService } from '../service/order';
+import { AuthService } from '../service/auth';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
@@ -11,14 +13,13 @@ import { Router } from '@angular/router';
   templateUrl: './checkout.html',
   styleUrl: './checkout.css',
 })
-export class Checkout {
+export class Checkout implements OnInit {
   cartItems: CartItem[] = [];
   subtotal: number = 0;
   tax: number = 0;
   shipping: number = 0;
   total: number = 0;
 
-  // Form data
   customerName: string = '';
   customerEmail: string = '';
   phone: string = '';
@@ -28,7 +29,6 @@ export class Checkout {
   zipCode: string = '';
   country: string = '';
 
-  // Payment options
   paymentMethod: string = 'credit-card';
   cardNumber: string = '';
   cardName: string = '';
@@ -40,60 +40,59 @@ export class Checkout {
   orderPlaced: boolean = false;
   orderId: string = '';
 
-  constructor(private ecommerceService: Ecommerceservice, private router: Router) {}
+  constructor(
+    private cartService: CartService,
+    private orderService: OrderService,
+    private authService: AuthService,
+    private router: Router,
+  ) {}
 
   ngOnInit() {
-    this.cartItems = this.ecommerceService.getCartItems();
+    this.cartItems = this.cartService.getCartItems();
     this.updateTotals();
 
     if (this.cartItems.length === 0) {
       this.router.navigate(['/cart']);
+      return;
+    }
+
+    const user = this.authService.currentUser();
+    if (user) {
+      this.customerName = user.name;
+      this.customerEmail = user.email;
     }
   }
 
+  discountedPrice(item: CartItem): number {
+    return item.product.price * (1 - (item.product.discountPercentage || 0) / 100);
+  }
+
   updateTotals() {
-    this.subtotal = this.ecommerceService.getSubtotal();
-    this.tax = this.ecommerceService.getTax();
-    this.shipping = this.ecommerceService.getShippingCost();
-    this.total = this.ecommerceService.getTotal();
+    this.subtotal = this.cartService.getSubtotal();
+    this.tax = this.cartService.getTax();
+    this.shipping = this.cartService.getShippingCost();
+    this.total = this.cartService.getTotal();
   }
 
   validateForm(): boolean {
     this.formErrors = [];
 
-    if (!this.customerName.trim()) {
-      this.formErrors.push('Full name is required');
-    }
+    if (!this.customerName.trim()) this.formErrors.push('Full name is required');
     if (!this.customerEmail.trim() || !this.isValidEmail(this.customerEmail)) {
       this.formErrors.push('Valid email is required');
     }
-    if (!this.phone.trim()) {
-      this.formErrors.push('Phone number is required');
-    }
-    if (!this.address.trim()) {
-      this.formErrors.push('Address is required');
-    }
-    if (!this.city.trim()) {
-      this.formErrors.push('City is required');
-    }
-    if (!this.state.trim()) {
-      this.formErrors.push('State is required');
-    }
-    if (!this.zipCode.trim()) {
-      this.formErrors.push('Zip code is required');
-    }
-    if (!this.country.trim()) {
-      this.formErrors.push('Country is required');
-    }
+    if (!this.phone.trim()) this.formErrors.push('Phone number is required');
+    if (!this.address.trim()) this.formErrors.push('Address is required');
+    if (!this.city.trim()) this.formErrors.push('City is required');
+    if (!this.state.trim()) this.formErrors.push('State is required');
+    if (!this.zipCode.trim()) this.formErrors.push('Zip code is required');
+    if (!this.country.trim()) this.formErrors.push('Country is required');
 
-    // Payment validation
     if (this.paymentMethod === 'credit-card') {
       if (!this.cardNumber.trim() || this.cardNumber.replace(/\s/g, '').length !== 16) {
         this.formErrors.push('Valid 16-digit card number is required');
       }
-      if (!this.cardName.trim()) {
-        this.formErrors.push('Cardholder name is required');
-      }
+      if (!this.cardName.trim()) this.formErrors.push('Cardholder name is required');
       if (!this.expiryDate.trim() || !this.isValidExpiryDate(this.expiryDate)) {
         this.formErrors.push('Valid expiry date (MM/YY) is required');
       }
@@ -132,21 +131,19 @@ export class Checkout {
 
     this.isProcessing = true;
 
-    // Simulate payment processing
     setTimeout(() => {
       const fullAddress = `${this.address}, ${this.city}, ${this.state} ${this.zipCode}, ${this.country}`;
-      const order = this.ecommerceService.createOrder(
+      const order = this.orderService.createOrder(
         this.customerEmail,
         this.customerName,
         fullAddress,
-        this.paymentMethod
+        this.paymentMethod,
       );
 
       this.orderId = order.id;
       this.orderPlaced = true;
       this.isProcessing = false;
 
-      // Redirect to order confirmation after 2 seconds
       setTimeout(() => {
         this.router.navigate(['/order-confirmation', this.orderId]);
       }, 2000);

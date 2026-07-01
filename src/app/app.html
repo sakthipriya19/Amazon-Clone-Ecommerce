@@ -1,12 +1,86 @@
-<nav>
-  <header class="app-header">
-    <h2>Yugan Clothing Store</h2>
-    <nav>
-      <a routerLink="home" routerLinkActive="active">Home</a>
-      <a routerLink="products" routerLinkActive="active">Products</a>
-      <a routerLink="cart" routerLinkActive="active">Cart {{cartLength}}</a>
-      <button routerLink="cart" class="checkout-btn">CheckOut</button>
+<header class="app-header">
+  <div class="header-top container">
+    <a routerLink="/" class="brand">YG <span>STORE</span></a>
+
+    <div class="search-wrap">
+      <input
+        type="text"
+        placeholder="Search products, brands and more"
+        [(ngModel)]="searchQuery"
+        (ngModelChange)="onSearchInput()"
+        (keyup.enter)="submitSearch()"
+        (focus)="showSuggestions.set(!!searchQuery.trim())"
+        (blur)="hideSuggestions()"
+      />
+      <button type="button" class="search-btn" (click)="submitSearch()" aria-label="Search">🔍</button>
+
+      @if (showSuggestions() && suggestions().length > 0) {
+        <div class="suggestions">
+          @for (product of suggestions(); track product.id) {
+            <button type="button" class="suggestion-item" (click)="goToSuggestion(product)">
+              <img [src]="product.thumbnail" [alt]="product.title" />
+              <span>{{ product.title }}</span>
+            </button>
+          }
+        </div>
+      }
+    </div>
+
+    <nav class="header-actions">
+      <a routerLink="/wishlist" class="icon-link">
+        <span class="icon">♡</span>
+        <span class="icon-label">Wishlist</span>
+        @if (wishlistService.wishlistCount() > 0) {
+          <span class="count-badge">{{ wishlistService.wishlistCount() }}</span>
+        }
+      </a>
+
+      <a routerLink="/cart" class="icon-link">
+        <span class="icon">🛒</span>
+        <span class="icon-label">Cart</span>
+        @if (cartService.cartCount() > 0) {
+          <span class="count-badge">{{ cartService.cartCount() }}</span>
+        }
+      </a>
+
+      <div class="account-menu">
+        <button type="button" class="icon-link account-btn" (click)="toggleAccountMenu()">
+          <span class="icon">👤</span>
+          <span class="icon-label">{{ authService.currentUser()?.name || 'Sign in' }}</span>
+        </button>
+
+        @if (accountMenuOpen()) {
+          <div class="dropdown">
+            @if (authService.isLoggedIn()) {
+              <a routerLink="/orders" (click)="accountMenuOpen.set(false)">My Orders</a>
+              <button type="button" (click)="logout()">Logout</button>
+            } @else {
+              <a routerLink="/login" (click)="accountMenuOpen.set(false)">Sign in</a>
+              <a routerLink="/signup" (click)="accountMenuOpen.set(false)">Create account</a>
+            }
+          </div>
+        }
+      </div>
     </nav>
-  </header>
+
+    <button type="button" class="hamburger" (click)="toggleMobileMenu()" aria-label="Menu">☰</button>
+  </div>
+
+  <div class="header-bottom" [class.open]="mobileMenuOpen()">
+    <div class="container nav-links">
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
+      <a routerLink="/products" routerLinkActive="active">All Products</a>
+      <a routerLink="/wishlist" routerLinkActive="active">Wishlist</a>
+      <a routerLink="/cart" routerLinkActive="active">Cart</a>
+      @if (authService.isLoggedIn()) {
+        <a routerLink="/orders" routerLinkActive="active">Orders</a>
+      }
+    </div>
+  </div>
+</header>
+
+<main>
   <router-outlet />
- 
+</main>
+
+<app-toast />
