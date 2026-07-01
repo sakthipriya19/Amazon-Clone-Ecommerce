@@ -1,0 +1,173 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #f5f7fa;
+  color: #333;
+}
+
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  padding: 20px 30px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.app-header h2 {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin: 0;
+}
+
+.app-header nav {
+  display: flex;
+  gap: 30px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.app-header nav a {
+  color: #fff;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 14px;
+  position: relative;
+  transition: all 0.3s ease;
+  padding: 8px 12px;
+  border-radius: 4px;
+}
+
+.app-header nav a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: #00bfa5;
+  transition: width 0.3s ease;
+}
+
+.app-header nav a:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.app-header nav a:hover::after,
+.app-header nav a.active::after {
+  width: 100%;
+}
+
+.app-header nav a.active {
+  background: rgba(0, 191, 165, 0.2);
+  border-bottom: 2px solid #00bfa5;
+}
+
+.checkout-btn {
+  background: linear-gradient(135deg, #00bfa5 0%, #009e86 100%);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  color: #fff;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 13px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 191, 165, 0.3);
+}
+
+.checkout-btn:hover {
+  background: linear-gradient(135deg, #009e86 0%, #007d6b 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 191, 165, 0.4);
+}
+
+.checkout-btn:active {
+  transform: translateY(0);
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #667eea;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #764ba2;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .app-header {
+    flex-direction: column;
+    gap: 15px;
+    padding: 15px 20px;
+  }
+
+  .app-header h2 {
+    font-size: 20px;
+  }
+
+  .app-header nav {
+    gap: 15px;
+    justify-content: center;
+  }
+
+  .app-header nav a {
+    font-size: 12px;
+    padding: 6px 10px;
+  }
+
+  .checkout-btn {
+    padding: 8px 16px;
+    font-size: 12px;
+  }
+}
+
+/* Focus styles for accessibility */
+:focus-visible {
+  outline: 2px solid #667eea;
+  outline-offset: 2px;
+}
+
+/* Loading and animation utilities */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}

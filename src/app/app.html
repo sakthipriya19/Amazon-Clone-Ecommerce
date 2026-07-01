@@ -1,0 +1,12 @@
+<nav>
+  <header class="app-header">
+    <h2>Yugan Clothing Store</h2>
+    <nav>
+      <a routerLink="home" routerLinkActive="active">Home</a>
+      <a routerLink="products" routerLinkActive="active">Products</a>
+      <a routerLink="cart" routerLinkActive="active">Cart {{cartLength}}</a>
+      <button routerLink="cart" class="checkout-btn">CheckOut</button>
+    </nav>
+  </header>
+  <router-outlet />
+ 

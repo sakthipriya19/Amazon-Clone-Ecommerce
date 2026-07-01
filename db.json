@@ -1,0 +1,88 @@
+{
+  "clothing": [
+    {
+      "id": 1,
+      "name": "Men's Ethnic Wear",
+      "description": "Men White Kurtha",
+      "price": 29.99,
+      "currency": "USD",
+      "size": ["S", "M", "L", "XL"],
+      "color": ["Blue", "White", "Black"],
+      "image": "assets/images/men_dress1.jpg",
+      "category":"Men"
+    },
+    {
+      "id": 2,
+      "name": "Men's Kurtha",
+      "description": "Men Blue Ethnic Kurtha",
+      "price": 49.99,
+      "currency": "USD",
+      "size": ["S", "M", "L"],
+      "color": ["Yellow", "Red", "Green"],
+      "image": "assets/images/men_dresss2.jpg",
+      "category":"Men"
+    },
+    {
+      "id": 3,
+      "name": "Womens Dress",
+      "description": "Women Classic straight-fit cotton Dress",
+      "price": 59.99,
+      "currency": "USD",
+      "size": ["30", "32", "34", "36"],
+      "color": ["Blue", "Black"],
+      "image": "assets/images/women_dress1.jpg",
+      "category":"Women"
+    },
+    {
+      "id": 4,
+      "name": "Women's Georgette Dress",
+      "description": "Women Soft wavy green dress",
+      "price": 39.99,
+      "currency": "USD",
+      "size": ["S", "M", "L", "XL"],
+      "color": ["Pink", "Gray", "Black"],
+      "image": "assets/images/women_dress2.jpg",
+      "category":"Women"
+    },{
+      "id": 5,
+      "name": "Girls Dress",
+      "description": "Kids Soft wpink dress",
+      "price": 39.99,
+      "currency": "USD",
+      "size": ["S", "M", "L", "XL"],
+      "color": ["Pink", "Gray", "Black"],
+      "image": "assets/images/kids_dress1.jpg",
+      "category":"Kids"
+    },{
+      "id": 6,
+      "name": "Kids dress",
+      "description": "Kids Soft bluedress",
+      "price": 39.99,
+      "currency": "USD",
+      "size": ["S", "M", "L", "XL"],
+      "color": ["Pink", "Gray", "Black"],
+      "image": "assets/images/kids_dress2.jpg",
+      "category":"Kids"
+    },{
+      "id": 7,
+      "name": "Boy baby dress",
+      "description": "Kids Blue dress",
+      "price": 39.99,
+      "currency": "USD",
+      "size": ["S", "M", "L", "XL"],
+      "color": ["Pink", "Gray", "Black"],
+      "image": "assets/images/kids_dress3.jpg",
+      "category":"Kids"
+    },{
+      "id": 8,
+      "name": "Boy dress",
+      "description": "Kids green dress",
+      "price": 39.99,
+      "currency": "USD",
+      "size": ["S", "M", "L", "XL"],
+      "color": ["Pink", "Gray", "Black"],
+      "image": "assets/images/kids_dress4.jpg",
+      "category":"Kids"
+    }
+  ]
+}

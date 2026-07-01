@@ -1,0 +1,80 @@
+<div class="home-container">
+  <div class="hero-section">
+    <div class="hero-content">
+      <h1>Welcome to Yugan Clothing Store</h1>
+      <p>Discover the latest fashion trends with premium quality clothing for men, women, and kids</p>
+      <a href="/products" class="btn-shop-now">Shop Now</a>
+    </div>
+    <div class="hero-background"></div>
+  </div>
+
+  <section class="featured-section">
+    <h2>Featured Collections</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">👕</div>
+        <h3>Men's Collection</h3>
+        <p>Premium ethnic wear and traditional clothing</p>
+        <a href="/products" class="feature-link">Browse Men →</a>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">👗</div>
+        <h3>Women's Collection</h3>
+        <p>Elegant dresses and traditional wear</p>
+        <a href="/products" class="feature-link">Browse Women →</a>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">👶</div>
+        <h3>Kids' Collection</h3>
+        <p>Comfortable and stylish kids clothing</p>
+        <a href="/products" class="feature-link">Browse Kids →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="why-us-section">
+    <h2>Why Choose Us</h2>
+    <div class="benefits-grid">
+      <div class="benefit-item">
+        <div class="benefit-number">✓</div>
+        <h3>Quality Products</h3>
+        <p>We only offer the highest quality clothing with premium materials</p>
+      </div>
+      <div class="benefit-item">
+        <div class="benefit-number">✓</div>
+        <h3>Fast Shipping</h3>
+        <p>Quick and reliable delivery to your doorstep</p>
+      </div>
+      <div class="benefit-item">
+        <div class="benefit-number">✓</div>
+        <h3>Secure Payment</h3>
+        <p>Multiple secure payment options for your safety</p>
+      </div>
+      <div class="benefit-item">
+        <div class="benefit-number">✓</div>
+        <h3>Customer Support</h3>
+        <p>24/7 customer service to help with your queries</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="bestsellers-section">
+    <h2>Bestsellers</h2>
+    @if (loadItems.length > 0) {
+      <div class="bestsellers-grid">
+        @for (product of loadItems; track product.id) {
+          <div class="bestseller-card">
+            <div class="product-badge">Popular</div>
+            <img [src]="product.image" [alt]="product.name" />
+            <h3>{{ product.name }}</h3>
+            <p class="category">{{ product.category }}</p>
+            <p class="price">${{ product.price }}</p>
+            <a [href]="'/products'" class="btn-view">View Details</a>
+          </div>
+        }
+      </div>
+    } @else {
+      <p class="loading">Loading products...</p>
+    }
+  </section>
+</div>

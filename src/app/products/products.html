@@ -1,0 +1,66 @@
+<div class="products-container">
+  <div class="filter-section">
+    <h3>Filter Products</h3>
+    <label for="category">Category:</label>
+    <select id="category" [(ngModel)]="selectedCategory" (change)="applyFilter()">
+      <option value="">All Categories</option>
+      <option value="Men">Men</option>
+      <option value="Women">Women</option>
+      <option value="Kids">Kids</option>
+    </select>
+  </div>
+
+  <div class="product-grid">
+    @for (product of filteredItems; track product.id) {
+      <div class="product-card">
+        <div class="product-image">
+          <img [src]="product.image" [alt]="product.name" />
+        </div>
+        <div class="product-info">
+          <h3>{{ product.name }}</h3>
+          <p class="description">{{ product.description }}</p>
+          <p class="price">${{ product.price }}</p>
+          
+          <div class="product-options">
+            <!-- Size Selection -->
+            <div class="option-group">
+              <label >Size:</label>
+              <select [(ngModel)]="product.selectedSize">
+                <option value="">Select Size</option>
+                @for (size of product.size; track size) {
+                  <option [value]="size">{{ size }}</option>
+                }
+              </select>
+            </div>
+
+            <!-- Color Selection -->
+            <div class="option-group">
+              <label>Color:</label>
+              <select  [(ngModel)]="product.selectedColor">
+                <option value="">Select Color</option>
+                @for (color of product.color; track color) {
+                  <option [value]="color">{{ color }}</option>
+                }
+              </select>
+            </div>
+
+            <!-- Quantity Selection -->
+            <div class="option-group">
+              <label>Quantity:</label>
+              <input 
+                type="number" 
+                [(ngModel)]="product.selectedQuantity" 
+                min="1" 
+                max="10"
+              />
+            </div>
+          </div>
+
+          <button (click)="addToCart(product)" class="btn-add-cart">
+            Add To Cart
+          </button>
+        </div>
+      </div>
+    }
+  </div>
+</div>

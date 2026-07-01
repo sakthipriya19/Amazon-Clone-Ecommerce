@@ -1,0 +1,146 @@
+<div class="order-confirmation-container">
+  @if (orderNotFound) {
+    <div class="order-not-found">
+      <h2>Order Not Found</h2>
+      <p>Sorry, we couldn't find your order. Please check your order ID and try again.</p>
+      <a routerLink="/home" class="btn-home">Back to Home</a>
+    </div>
+  } @else if (order) {
+    <div class="confirmation-content">
+      <div class="confirmation-header">
+        <div class="success-badge">
+          <div class="check-icon">✓</div>
+        </div>
+        <h1>Order Confirmed!</h1>
+        <p>Thank you for your purchase. We've received your order and will process it shortly.</p>
+      </div>
+
+      <!-- Order Details -->
+      <div class="order-details-section">
+        <div class="detail-box">
+          <h3>Order Information</h3>
+          <div class="detail-row">
+            <span class="label">Order ID:</span>
+            <span class="value">{{ order.id }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="label">Order Date:</span>
+            <span class="value">{{ order.orderDate | date: 'MMM dd, yyyy HH:mm' }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="label">Status:</span>
+            <span class="value status-completed">{{ order.status | uppercase }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="label">Payment Method:</span>
+            <span class="value">{{ order.paymentMethod | titlecase }}</span>
+          </div>
+        </div>
+
+        <div class="detail-box">
+          <h3>Customer Information</h3>
+          <div class="detail-row">
+            <span class="label">Name:</span>
+            <span class="value">{{ order.customerName }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="label">Email:</span>
+            <span class="value">{{ order.customerEmail }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="label">Delivery Address:</span>
+            <span class="value">{{ order.address }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Order Items -->
+      <div class="order-items-section">
+        <h2>Order Items</h2>
+        <table class="items-table">
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th>Size</th>
+              <th>Color</th>
+              <th>Quantity</th>
+              <th>Unit Price</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (item of order.items; track item.id) {
+              <tr>
+                <td class="product-name">
+                  <img [src]="item.image" [alt]="item.name" class="product-thumb" />
+                  <span>{{ item.name }}</span>
+                </td>
+                <td>{{ item.selectedSize }}</td>
+                <td>{{ item.selectedColor }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>${{ item.price.toFixed(2) }}</td>
+                <td class="total-cell">${{ (item.price * item.quantity).toFixed(2) }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Order Summary -->
+      <div class="order-summary-section">
+        <div class="summary-box">
+          <div class="summary-row">
+            <span>Subtotal:</span>
+            <span>${{ order.subtotal.toFixed(2) }}</span>
+          </div>
+          <div class="summary-row">
+            <span>Tax (8%):</span>
+            <span>${{ order.tax.toFixed(2) }}</span>
+          </div>
+          <div class="summary-row">
+            <span>Shipping:</span>
+            <span>${{ order.shippingCost.toFixed(2) }}</span>
+          </div>
+          <div class="summary-divider"></div>
+          <div class="summary-row total">
+            <span>Total Amount:</span>
+            <span>${{ order.total.toFixed(2) }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Next Steps -->
+      <div class="next-steps-section">
+        <h2>What's Next?</h2>
+        <div class="steps">
+          <div class="step">
+            <div class="step-number">1</div>
+            <h4>Order Confirmation</h4>
+            <p>You'll receive an email confirmation with order details shortly.</p>
+          </div>
+          <div class="step">
+            <div class="step-number">2</div>
+            <h4>Processing</h4>
+            <p>Our team will prepare and package your order.</p>
+          </div>
+          <div class="step">
+            <div class="step-number">3</div>
+            <h4>Shipped</h4>
+            <p>You'll receive tracking information via email.</p>
+          </div>
+          <div class="step">
+            <div class="step-number">4</div>
+            <h4>Delivered</h4>
+            <p>Your order will be delivered to the specified address.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="actions">
+        <button (click)="printOrder()" class="btn-print">🖨 Print Receipt</button>
+        <a routerLink="/products" class="btn-continue">Continue Shopping</a>
+      </div>
+    </div>
+  }
+</div>

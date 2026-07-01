@@ -1,0 +1,76 @@
+<div class="cart-container">
+  @if (cartItems.length === 0) {
+    <div class="empty-cart">
+      <h2>Your Cart is Empty</h2>
+      <p>Start adding items to your cart!</p>
+      <a routerLink="/products" class="btn-continue-shopping">Continue Shopping</a>
+    </div>
+  } @else {
+    <div class="cart-content">
+      <div class="cart-items-section">
+        <h2>Shopping Cart ({{ cartItems.length }} items)</h2>
+        <div class="cart-items">
+          @for (item of cartItems; track item.id) {
+            <div class="cart-item">
+              <img [src]="item.image" [alt]="item.name" class="item-image" />
+              <div class="item-details">
+                <h3>{{ item.name }}</h3>
+                <p class="item-description">{{ item.description }}</p>
+                <div class="item-options">
+                  <span><strong>Size:</strong> {{ item.selectedSize }}</span>
+                  <span><strong>Color:</strong> {{ item.selectedColor }}</span>
+                </div>
+                <div class="price-info">
+                  <span class="unit-price">${{ item.price }}</span>
+                </div>
+              </div>
+
+              <div class="item-quantity">
+                <button (click)="updateQuantity(item, item.quantity - 1)" [disabled]="item.quantity <= 1" class="btn-qty">
+                  −
+                </button>
+                <input type="number" [(ngModel)]="item.quantity" (change)="updateQuantity(item, item.quantity)" min="1" max="10" />
+                <button (click)="updateQuantity(item, item.quantity + 1)" class="btn-qty">
+                  +
+                </button>
+              </div>
+
+              <div class="item-total">
+                <p class="total-price">${{ (item.price * item.quantity).toFixed(2) }}</p>
+              </div>
+
+              <button (click)="removeItem(item)" class="btn-remove">✕</button>
+            </div>
+          }
+        </div>
+
+        <button (click)="clearCart()" class="btn-clear-cart">Clear Cart</button>
+      </div>
+
+      <div class="cart-summary">
+        <h2>Order Summary</h2>
+        <div class="summary-row">
+          <span>Subtotal:</span>
+          <span>${{ subtotal.toFixed(2) }}</span>
+        </div>
+        <div class="summary-row">
+          <span>Tax (8%):</span>
+          <span>${{ tax.toFixed(2) }}</span>
+        </div>
+        <div class="summary-row">
+          <span>Shipping:</span>
+          <span>${{ shipping.toFixed(2) }}</span>
+        </div>
+        <div class="summary-divider"></div>
+        <div class="summary-row total">
+          <span>Total:</span>
+          <span>${{ total.toFixed(2) }}</span>
+        </div>
+
+        <a routerLink="/checkout" class="btn-checkout">Proceed to Checkout</a>
+        <a routerLink="/products" class="btn-continue-shopping">Continue Shopping</a>
+      </div>
+    </div>
+  }
+</div>
+

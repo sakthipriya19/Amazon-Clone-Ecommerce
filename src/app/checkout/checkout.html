@@ -1,0 +1,176 @@
+<div class="checkout-container">
+  @if (orderPlaced) {
+    <div class="order-success">
+      <div class="success-icon">✓</div>
+      <h2>Order Placed Successfully!</h2>
+      <p>Order ID: {{ orderId }}</p>
+      <p>Redirecting to order confirmation...</p>
+    </div>
+  } @else {
+    <div class="checkout-content">
+      <div class="checkout-form-section">
+        <h1>Checkout</h1>
+
+        @if (formErrors.length > 0) {
+          <div class="error-messages">
+            @for (error of formErrors; track error) {
+              <p class="error-item">⚠ {{ error }}</p>
+            }
+          </div>
+        }
+
+        <form (ngSubmit)="placeOrder()">
+          <!-- Shipping Information -->
+          <section class="form-section">
+            <h2>Shipping Information</h2>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="name">Full Name *</label>
+                <input type="text" id="name" [(ngModel)]="customerName" name="customerName" placeholder="John Doe" />
+              </div>
+              <div class="form-group">
+                <label for="email">Email Address *</label>
+                <input type="email" id="email" [(ngModel)]="customerEmail" name="customerEmail" placeholder="john@example.com" />
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="phone">Phone Number *</label>
+                <input type="tel" id="phone" [(ngModel)]="phone" name="phone" placeholder="+1 (555) 123-4567" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="address">Street Address *</label>
+              <input type="text" id="address" [(ngModel)]="address" name="address" placeholder="123 Main Street" />
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="city">City *</label>
+                <input type="text" id="city" [(ngModel)]="city" name="city" placeholder="New York" />
+              </div>
+              <div class="form-group">
+                <label for="state">State/Province *</label>
+                <input type="text" id="state" [(ngModel)]="state" name="state" placeholder="NY" />
+              </div>
+              <div class="form-group">
+                <label for="zipcode">Zip Code *</label>
+                <input type="text" id="zipcode" [(ngModel)]="zipCode" name="zipCode" placeholder="10001" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="country">Country *</label>
+              <input type="text" id="country" [(ngModel)]="country" name="country" placeholder="United States" />
+            </div>
+          </section>
+
+          <!-- Payment Information -->
+          <section class="form-section">
+            <h2>Payment Method</h2>
+            <div class="payment-options">
+              <label class="payment-option">
+                <input type="radio" value="credit-card" [(ngModel)]="paymentMethod" name="paymentMethod" />
+                <span>Credit/Debit Card</span>
+              </label>
+              <label class="payment-option">
+                <input type="radio" value="paypal" [(ngModel)]="paymentMethod" name="paymentMethod" />
+                <span>PayPal</span>
+              </label>
+              <label class="payment-option">
+                <input type="radio" value="bank-transfer" [(ngModel)]="paymentMethod" name="paymentMethod" />
+                <span>Bank Transfer</span>
+              </label>
+            </div>
+
+            @if (paymentMethod === 'credit-card') {
+              <div class="card-details">
+                <div class="form-group">
+                  <label for="cardname">Cardholder Name *</label>
+                  <input type="text" id="cardname" [(ngModel)]="cardName" name="cardName" placeholder="John Doe" />
+                </div>
+
+                <div class="form-group">
+                  <label for="cardnumber">Card Number *</label>
+                  <input
+                    type="text"
+                    id="cardnumber"
+                    [(ngModel)]="cardNumber"
+                    (blur)="formatCardNumber()"
+                    name="cardNumber"
+                    placeholder="1234 5678 9012 3456"
+                    maxlength="19"
+                  />
+                </div>
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="expiry">Expiry Date (MM/YY) *</label>
+                    <input type="text" id="expiry" [(ngModel)]="expiryDate" name="expiryDate" placeholder="12/25" maxlength="5" />
+                  </div>
+                  <div class="form-group">
+                    <label for="cvv">CVV *</label>
+                    <input type="password" id="cvv" [(ngModel)]="cvv" name="cvv" placeholder="123" maxlength="3" />
+                  </div>
+                </div>
+              </div>
+            }
+          </section>
+
+          <div class="form-actions">
+            <button type="button" (click)="goBack()" class="btn-back">← Back to Cart</button>
+            <button type="submit" [disabled]="isProcessing" class="btn-place-order">
+              @if (isProcessing) {
+                <span>Processing...</span>
+              } @else {
+                <span>Place Order - ${{ total.toFixed(2) }}</span>
+              }
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Order Summary -->
+      <div class="order-summary">
+        <h2>Order Summary</h2>
+
+        <div class="summary-items">
+          @for (item of cartItems; track item.id) {
+            <div class="summary-item">
+              <img [src]="item.image" [alt]="item.name" />
+              <div class="item-info">
+                <h4>{{ item.name }}</h4>
+                <p>{{ item.selectedSize }} / {{ item.selectedColor }} × {{ item.quantity }}</p>
+              </div>
+              <span class="item-price">${{ (item.price * item.quantity).toFixed(2) }}</span>
+            </div>
+          }
+        </div>
+
+        <div class="summary-divider"></div>
+
+        <div class="summary-row">
+          <span>Subtotal:</span>
+          <span>${{ subtotal.toFixed(2) }}</span>
+        </div>
+        <div class="summary-row">
+          <span>Tax (8%):</span>
+          <span>${{ tax.toFixed(2) }}</span>
+        </div>
+        <div class="summary-row">
+          <span>Shipping:</span>
+          <span>${{ shipping.toFixed(2) }}</span>
+        </div>
+
+        <div class="summary-divider"></div>
+
+        <div class="summary-row total">
+          <span>Total:</span>
+          <span>${{ total.toFixed(2) }}</span>
+        </div>
+      </div>
+    </div>
+  }
+</div>
