@@ -2,6 +2,8 @@
 
 An Amazon-style shopping experience built with Angular 21 (standalone components + SSR), with its own light, teal-and-amber design — not a visual clone of Amazon. Product data is fetched live from the [DummyJSON](https://dummyjson.com) API: 194 products across 24 categories with real images, stock, discounts, ratings, and reviews.
 
+**Live demo:** [amazon-clone-ecommerce-kohl.vercel.app](https://amazon-clone-ecommerce-kohl.vercel.app/)
+
 ## Features
 
 - **Browse & discover** — home page with category tiles, trending deals, top-rated and randomized "just for you" sections
