@@ -63,7 +63,3 @@ src/app/
 | `/orders` | Order history | requires sign-in |
 | `/order-confirmation/:orderId` | Order confirmation / detail | |
 
-## Notes
-
-- **Authentication is a demo mock**: accounts and (plaintext) passwords are stored in `localStorage` on the client. There is no real backend, so this is not meant to be secure — it exists only to gate checkout/orders the way a real storefront would.
-- **`db.json`** at the repo root is a leftover from an earlier local `json-server` setup and is no longer used; product data now comes live from DummyJSON.
